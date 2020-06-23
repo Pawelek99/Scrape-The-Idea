@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
 	textPrimary: '#515151',
 	textInverse: '#FFFFFF',
 	textSecondary: '#ABABAB',
+	shadowColor: 'rgba(51,51,51,0.08)',
 };
 
 export default theme;
