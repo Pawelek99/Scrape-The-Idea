@@ -12,7 +12,7 @@ import {
 	StyledDetails,
 } from './styles';
 
-interface PostProps {
+interface PostProps extends React.HTMLAttributes<HTMLDivElement> {
 	website?: string;
 	author?: string;
 	title?: string;

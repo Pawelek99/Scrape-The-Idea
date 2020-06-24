@@ -147,13 +147,23 @@ const posts = [
 const Home = () => {
 
 	const [isModal, setIsModal] = useState(true);
-	const [activePost, setActivePost] = useState({});
+	const [activePost, setActivePost] = useState({
+		id: '1',
+		website: 'Dribbble',
+		author: 'Tran Mau Tri Tam',
+		title: 'Blurr_ Animation',
+		uploadedBy: 'Jun 22, 2020',
+		link: 'https://dribbble.com/shots/12209806-Blurr-Animation',
+		thumbnail:
+			'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
+		stars: 1243,
+	});
 
-	const showModal = (e: MouseEvent<HTMLButtonElement>) => {
-		setIsModal(true);
-		setActivePost(e.target);
-		console.log(e.target);
-	}
+	// const showModal = (e: MouseEvent<HTMLDivElement>) => {
+	// 	setIsModal(true);
+	// 	setActivePost(e.target);
+	// 	console.log(e.target);
+	// }
 
 	return (
 		<>
@@ -179,6 +189,7 @@ const Home = () => {
 									link,
 								}) => (
 									<Post
+										onClick={() => {console.log('ahaha')}}
 										key={id}
 										author={author}
 										title={title}
@@ -222,7 +233,7 @@ const Home = () => {
 					</GridContainer>
 				</main>
 			</MainTemplate>
-			{isModal && <Modal isModal={setIsModal}/>}
+			{isModal && <Modal isModal={setIsModal} id={activePost.id} website={activePost.website} author={activePost.author} link={activePost.link} uploadedBy={activePost.uploadedBy} thumbnail={activePost.thumbnail} stars={activePost.stars}/>}
 		</>
 	);
 };
