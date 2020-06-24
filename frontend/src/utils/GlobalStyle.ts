@@ -29,6 +29,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     font-size: inherit;
   }
+
+  img {
+    max-width: 100%;
+  }
 `;
 
 export default GlobalStyle;
