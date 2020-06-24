@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, MouseEvent } from 'react';
 import MainTemplate from 'templates/MainTemplate/MainTemplate';
 import HomepageHeading from 'components/molecules/HomepaheHeading/HomepageHeading';
 import SearchBar from 'components/molecules/SearchBar/SearchBar';
 import H3 from 'components/atoms/H3/H3';
 import GridContainer from 'components/atoms/GridContainer/GridContainer';
 import Post from 'components/organisms/Post/Post';
+import Modal from '../../components/organisms/Modal/Modal';
 
 const posts = [
 	{
@@ -144,6 +145,16 @@ const posts = [
 ];
 
 const Home = () => {
+
+	const [isModal, setIsModal] = useState(true);
+	const [activePost, setActivePost] = useState({});
+
+	const showModal = (e: MouseEvent<HTMLButtonElement>) => {
+		setIsModal(true);
+		setActivePost(e.target);
+		console.log(e.target);
+	}
+
 	return (
 		<>
 			<MainTemplate>
@@ -211,6 +222,7 @@ const Home = () => {
 					</GridContainer>
 				</main>
 			</MainTemplate>
+			{isModal && <Modal isModal={setIsModal}/>}
 		</>
 	);
 };
