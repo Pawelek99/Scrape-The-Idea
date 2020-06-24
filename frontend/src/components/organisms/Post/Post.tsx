@@ -1,5 +1,6 @@
 import React from 'react';
 import dribbble from '../../../assets/dribbble.svg';
+import uplabs from '../../../assets/uplabs.svg';
 import star from '../../../assets/star.svg';
 import H4 from 'components/atoms/H4/H4';
 import {
@@ -21,6 +22,15 @@ interface PostProps {
 	link?: string;
 }
 
+type websitesOptions = {
+	[key: string]: string;
+};
+
+const websites: websitesOptions = {
+	DRIBBBLE: dribbble,
+	UPLABS: uplabs,
+};
+
 const Post: React.SFC<PostProps> = ({
 	title,
 	author,
@@ -33,8 +43,8 @@ const Post: React.SFC<PostProps> = ({
 	return (
 		<StyledWrapper>
 			<StyledTopSection>
-				<a href="https://dribbble.com/">
-					<img src={dribbble} alt="" />
+				<a href={website}>
+					<img src={website ? websites[website] : ''} alt="" />
 				</a>
 
 				<StyledStarWrapper>

@@ -31,7 +31,7 @@ export const StyledStarWrapper = styled.div`
 	align-items: center;
 	opacity: 0;
 	transform: translateX(200%);
-	transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
+	transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 
 	img {
 		margin-left: 5px;
