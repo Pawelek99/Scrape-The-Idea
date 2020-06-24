@@ -8,5 +8,6 @@ declare module 'styled-components' {
 		textInverse: string;
 		textSecondary: string;
 		shadowColor: string;
+		shadowPrimary: string;
 	}
 }

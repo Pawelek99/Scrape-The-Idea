@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5;
     overscroll-behavior-y: contain;
     background-color: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.textPrimary};
   }
 
   *, *::before, *::after {
@@ -20,8 +21,17 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  *:focus {
+    outline-color: ${({ theme }) => theme.primary};
+  }
+
   button, input, textarea, a {
     font-family: inherit;
+    font-size: inherit;
+  }
+
+  img {
+    max-width: 100%;
   }
 `;
 
