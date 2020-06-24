@@ -96,6 +96,7 @@ const Home = () => {
 								stars,
 								website,
 								thumbnail,
+								link,
 							}) => (
 								<Post
 									key={id}
@@ -105,6 +106,7 @@ const Home = () => {
 									stars={stars}
 									website={website}
 									thumbnail={thumbnail}
+									link={link}
 								/>
 							)
 						)}
