@@ -1,5 +1,7 @@
 import React from 'react'
-import { Container, ModalWrapper, Description, AuthorWrapper, Palette, StyledDetails } from './styles'
+//import {usePalette}  from 'color-thief-react'
+import Palette from 'react-palette'
+import { Container, ModalWrapper, Description, AuthorWrapper, StyledDetails } from './styles'
 
 interface ModalProps {
     isModal: Function;
@@ -15,9 +17,13 @@ interface ModalProps {
 }
 
 const Modal: React.SFC<ModalProps> = ({isModal, id, website, author, link, thumbnail, stars}) => {
+
+    //const {data} = usePalette(thumbnail)
+    //const { data, loading, error } = usePalette(thumbnail ? thumbnail : '')
+    //console.log(data)
     return (
         <Container onClick={() => isModal(false)}>
-            <ModalWrapper backgroundImg = {thumbnail}>
+            <ModalWrapper backgroundImg = {thumbnail} onClick={(e) => e.stopPropagation()}>
                 <Description>
                     <AuthorWrapper>
                         <h1>{website}</h1>
@@ -27,8 +33,19 @@ const Modal: React.SFC<ModalProps> = ({isModal, id, website, author, link, thumb
                             </div>
                         </StyledDetails>
                     </AuthorWrapper>
-                    <Palette>
-
+                    {/* <colorThief.Palette src={thumbnail} colorCount={7}>
+                        {({ data }: {data: any}) => (
+                            <div style={{ color: data[0], backgroundColor: data[1] }}>
+                            Text with the predominant color
+                            </div>
+                        )}
+                    </colorThief.Palette> */}
+                    <Palette src={thumbnail ? thumbnail : ''}>
+                        {({data}: {data: any}) => (
+                            <div style={{color: data.vibrant}}>
+                                Text with the vibrant color
+                            </div>
+                        )}
                     </Palette>
                 </Description>
             </ModalWrapper>

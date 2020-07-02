@@ -31,7 +31,7 @@ export const ModalWrapper = styled.div<ModalProps>`
 export const Description = styled.div`
     width: 100%;
     height: 177px;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.45);
     backdrop-filter: blur(22px);
     align-self: flex-end;
     padding: 28px;

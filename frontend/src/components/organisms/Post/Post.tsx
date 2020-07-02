@@ -39,9 +39,10 @@ const Post: React.SFC<PostProps> = ({
 	website,
 	thumbnail,
 	link,
+	...props
 }) => {
 	return (
-		<StyledWrapper>
+		<StyledWrapper onClick={props.onClick}>
 			<StyledTopSection>
 				<a href={website}>
 					<img src={website ? websites[website] : ''} alt="" />

@@ -8,7 +8,7 @@ const HomepageHeading = () => {
 		<StyledWrapper>
 			<H1> Search for inspiration </H1>
 			<H2>
-				Or just srape the <StyledAccent> idea </StyledAccent> ;)
+				Or just scrape the <StyledAccent> idea </StyledAccent> ;)
 			</H2>
 		</StyledWrapper>
 	);

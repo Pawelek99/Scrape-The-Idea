@@ -159,11 +159,11 @@ const Home = () => {
 		stars: 1243,
 	});
 
-	// const showModal = (e: MouseEvent<HTMLDivElement>) => {
-	// 	setIsModal(true);
-	// 	setActivePost(e.target);
-	// 	console.log(e.target);
-	// }
+	const showModal = (id: string) => {
+		const post = posts.find(el => el.id === id);
+		if (post) setActivePost(post);
+		setIsModal(true);
+	}
 
 	return (
 		<>
@@ -189,7 +189,7 @@ const Home = () => {
 									link,
 								}) => (
 									<Post
-										onClick={() => {console.log('ahaha')}}
+										onClick={() => showModal(id)}
 										key={id}
 										author={author}
 										title={title}
