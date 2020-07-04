@@ -59,7 +59,7 @@ export const StyledDetails = styled.div`
 	font-size: 1.8rem;
 	margin-top: 6px;
 
-	a {
+	& a {
 		text-decoration: none;
 		color: inherit;
 		position: relative;
