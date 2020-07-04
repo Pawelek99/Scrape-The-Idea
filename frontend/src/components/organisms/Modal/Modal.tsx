@@ -9,7 +9,7 @@ import {
 } from './styles';
 
 interface ModalProps {
-	isModal: Function;
+	isModal: (show: boolean) => void;
 	id?: string;
 	website?: string;
 	author?: string;
