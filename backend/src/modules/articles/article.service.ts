@@ -15,6 +15,8 @@ export class ArticlesService {
 
         const _ = cheerio.load(body);
         let data = []
+        const imgSizeRegex4 = /_2x/g
+        const imgSizeRegex2 = /_1x/g
         for(let i = 0; i < 30; i++) {
             if(!_('.display-name')[i]) break;
             data.push({
@@ -22,7 +24,7 @@ export class ArticlesService {
                 id: Math.floor(Math.random() * 100**10),
                 author: _('.display-name')[i].children[0].data,
                 title: _('.shot-title')[i].children[0].data,
-                thumbnail: _('picture').children('img')[i].attribs.src,
+                thumbnail: _('picture').children('img')[i].attribs.src.replace(imgSizeRegex4, '_4x').replace(imgSizeRegex2, '_2x'),
                 link: 'https://www.dribbble.com'+_('.dribbble-link')[i].attribs.href,
                 website: 'DRIBBLE',
                 createdAt: Date.now(),
