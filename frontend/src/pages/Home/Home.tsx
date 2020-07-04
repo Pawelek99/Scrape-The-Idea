@@ -145,7 +145,6 @@ const posts = [
 ];
 
 const Home = () => {
-
 	const [isModal, setIsModal] = useState(true);
 	const [activePost, setActivePost] = useState({
 		id: '1',
@@ -160,10 +159,10 @@ const Home = () => {
 	});
 
 	const showModal = (id: string) => {
-		const post = posts.find(el => el.id === id);
+		const post = posts.find((el) => el.id === id);
 		if (post) setActivePost(post);
 		setIsModal(true);
-	}
+	};
 
 	return (
 		<>
@@ -233,7 +232,18 @@ const Home = () => {
 					</GridContainer>
 				</main>
 			</MainTemplate>
-			{isModal && <Modal isModal={setIsModal} id={activePost.id} website={activePost.website} author={activePost.author} link={activePost.link} uploadedBy={activePost.uploadedBy} thumbnail={activePost.thumbnail} stars={activePost.stars}/>}
+			{isModal && (
+				<Modal
+					isModal={setIsModal}
+					id={activePost.id}
+					website={activePost.website}
+					author={activePost.author}
+					link={activePost.link}
+					uploadedBy={activePost.uploadedBy}
+					thumbnail={activePost.thumbnail}
+					stars={activePost.stars}
+				/>
+			)}
 		</>
 	);
 };
