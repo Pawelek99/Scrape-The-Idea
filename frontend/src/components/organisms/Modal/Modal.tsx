@@ -18,6 +18,7 @@ interface ModalProps {
 	link?: string;
 	thumbnail?: string;
 	stars?: number;
+	image?: string;
 }
 
 const Modal: React.SFC<ModalProps> = ({
@@ -28,11 +29,12 @@ const Modal: React.SFC<ModalProps> = ({
 	link,
 	thumbnail,
 	stars,
+	image
 }) => {
 	return (
 		<Container onClick={() => isModal(false)}>
 			<ModalWrapper
-				backgroundImg={thumbnail}
+				backgroundImg={image}
 				onClick={(e) => e.stopPropagation()}
 			>
 				<Description>
