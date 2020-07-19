@@ -28,7 +28,7 @@ export class ArticlesService {
                 thumbnail: _dribbble('picture').children('img')[i].attribs.src,
                 image: _dribbble('picture').children('img')[i].attribs.src.replace(imgSizeRegex4, '_4x').replace(imgSizeRegex2, '_2x'),
                 link: 'https://www.dribbble.com'+_dribbble('.dribbble-link')[i].attribs.href,
-                website: 'DRIBBLE',
+                website: 'DRIBBBLE',
                 createdAt: new Date().toISOString(),
                 //@todo
                 stars: '1000',
@@ -69,9 +69,9 @@ export class ArticlesService {
                     createdAt: article.createdAt,
                     stars: article.stars,
                 }
-                const checkArticle = await this.articleModel.find({title: article.title})
+                const checkArticle = await this.articleModel.findOne({title: article.title})
                 console.log(checkArticle)
-                if (checkArticle.length <= 0) {
+                if (!checkArticle) {
                     console.log('wchodze')
                     return await this.articleModel.create(content)
                 }
