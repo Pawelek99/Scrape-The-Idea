@@ -6,6 +6,7 @@ import H3 from 'components/atoms/H3/H3';
 import GridContainer from 'components/atoms/GridContainer/GridContainer';
 import Post from 'components/organisms/Post/Post';
 import Modal from '../../components/organisms/Modal/Modal';
+import Loader from '../../components/atoms/Loader/Loader';
 
 const posts = [
 	{
@@ -154,13 +155,15 @@ const defaultPost = {
 	thumbnail:
 		'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
 	stars: 1243,
-	image: 'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
-}
+	image:
+		'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
+};
 
 const Home = () => {
 	const [isModal, setIsModal] = useState(false);
 	const [activePost, setActivePost] = useState(defaultPost);
-	const [posts, setPosts] = useState([defaultPost])
+	const [posts, setPosts] = useState([defaultPost]);
+	const [allPosts, setAllPosts] = useState([defaultPost]);
 
 	const showModal = (id: string) => {
 		if (posts) {
@@ -172,11 +175,18 @@ const Home = () => {
 
 	const getPosts = () => {
 		fetch('http://localhost:8000/api/v1/articles/recent')
-		.then(response => response.json())
-		.then(data => setPosts(data))
-	}
+			.then((response) => response.json())
+			.then((data) => setPosts(data));
+	};
 
-	useMemo(() => getPosts(), [])
+	const getAllPosts = () => {
+		fetch('http://localhost:8000/api/v1/articles/all')
+			.then((response) => response.json())
+			.then((data) => setAllPosts(data));
+	};
+
+	useMemo(() => getPosts(), []);
+	useMemo(() => getAllPosts(), []);
 
 	return (
 		<>
@@ -187,70 +197,72 @@ const Home = () => {
 				</header>
 				<main>
 					<H3> Recently uploaded </H3>
-					<GridContainer>
-						{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ?
-						'hello'
-						:
-						posts
-							.sort(() => 0.5 - Math.random())
-							.map(
-								({
-									_id,
-									title,
-									author,
-									uploadedBy,
-									stars,
-									website,
-									thumbnail,
-									link,
-								}) => (
-									<Post
-										onClick={() => showModal(_id)}
-										key={_id}
-										author={author}
-										title={title}
-										uploadedBy={uploadedBy}
-										stars={stars}
-										website={website}
-										thumbnail={thumbnail}
-										link={link}
-									/>
-								)
-							)}
-					</GridContainer>
+					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ? (
+						<Loader />
+					) : (
+						<GridContainer>
+							{posts
+								.sort(() => 0.5 - Math.random())
+								.map(
+									({
+										_id,
+										title,
+										author,
+										uploadedBy,
+										stars,
+										website,
+										thumbnail,
+										link,
+									}) => (
+										<Post
+											onClick={() => showModal(_id)}
+											key={_id}
+											author={author}
+											title={title}
+											uploadedBy={uploadedBy}
+											stars={stars}
+											website={website}
+											thumbnail={thumbnail}
+											link={link}
+										/>
+									)
+								)}
+						</GridContainer>
+					)}
 
 					<H3> Most liked </H3>
-					<GridContainer>
-						{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ?
+					{JSON.stringify(allPosts[0]) === JSON.stringify(defaultPost) ? (
 						'hello'
-						:
-						posts
-							.sort(() => 0.5 - Math.random())
-							.map(
-								({
-									_id,
-									title,
-									author,
-									uploadedBy,
-									stars,
-									website,
-									thumbnail,
-									link,
-								}) => (
-									<Post
-										onClick={() => showModal(_id)}
-										key={`2${_id}`}
-										author={author}
-										title={title}
-										uploadedBy={uploadedBy}
-										stars={stars}
-										website={website}
-										thumbnail={thumbnail}
-										link={link}
-									/>
-								)
-							)}
-					</GridContainer>
+					) : (
+						<GridContainer>
+							{allPosts
+								.sort(() => 0.5 - Math.random())
+								.map(
+									({
+										_id,
+										title,
+										author,
+										uploadedBy,
+										stars,
+										website,
+										thumbnail,
+										link,
+									}) => (
+										<Post
+											onClick={() => showModal(_id)}
+											key={`2${_id}`}
+											author={author}
+											title={title}
+											uploadedBy={uploadedBy}
+											stars={stars}
+											website={website}
+											thumbnail={thumbnail}
+											link={link}
+										/>
+									)
+								)}
+						</GridContainer>
+					)}
 				</main>
 			</MainTemplate>
 			{isModal && (

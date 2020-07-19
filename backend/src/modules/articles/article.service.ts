@@ -12,6 +12,7 @@ export class ArticlesService {
     async findRecent(): Promise<Article[]> {
         const dribbble = await fetch('https://dribbble.com/?page=1&per_page=24');
         const awwwards = await fetch('https://www.awwwards.com/websites/')
+        const behance = await fetch('https://www.behance.net/search/projects')
         const body = await dribbble.text();
 
         const _dribbble = cheerio.load(body);
@@ -56,6 +57,26 @@ export class ArticlesService {
             })
         }
 
+        const body2 = await behance.text()
+        const _behance = cheerio.load(body2)
+
+        for(let i = 0; i < 20; i++) {
+            if(!_behance('.js-cover-image')[i]) break;
+            data.push({
+                id: Math.floor(Math.random() * 100**10),
+                //@todo author
+                author: 'in progress',
+                title: _behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i].children[0].data,
+                thumbnail: _behance('.ProjectCoverNeue-image-1MZ')[i].attribs.src,
+                image: _behance('.js-cover-image')[i].attribs.srcset.match(getImgUrlRegex).pop(),
+                link: _behance('.Cover-overlay-28e').find('a')[i].attribs.href,
+                website: 'BEHANCE',
+                createdAt: new Date().toISOString(),
+                //@todo
+                stars: '1000',
+            })
+        }
+
         let articles = data
         if (articles) {
             articles = await Promise.all(articles.map(async (article) => {
@@ -70,18 +91,13 @@ export class ArticlesService {
                     stars: article.stars,
                 }
                 const checkArticle = await this.articleModel.findOne({title: article.title})
-                console.log(checkArticle)
                 if (!checkArticle) {
-                    console.log('wchodze')
                     return await this.articleModel.create(content)
                 }
-                console.log('nie wchodze')
                 return checkArticle
             }));
-
-            //console.log(articles)
             return articles
-        }
+        };
         return []
 
         // const regex = /var newestShots = ((?:.|\n)*?\}])/m;
