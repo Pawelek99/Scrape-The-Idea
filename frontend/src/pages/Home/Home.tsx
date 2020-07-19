@@ -145,7 +145,7 @@ const posts = [
 ];
 
 const defaultPost = {
-	id: '1',
+	_id: '1',
 	website: 'Dribbble',
 	author: 'Tran Mau Tri Tam',
 	title: 'Blurr_ Animation',
@@ -164,7 +164,7 @@ const Home = () => {
 
 	const showModal = (id: string) => {
 		if (posts) {
-			const post = posts.find((el) => el.id === id);
+			const post = posts.find((el) => el._id === id);
 			if (post) setActivePost(post);
 			setIsModal(true);
 		}
@@ -195,7 +195,7 @@ const Home = () => {
 							.sort(() => 0.5 - Math.random())
 							.map(
 								({
-									id,
+									_id,
 									title,
 									author,
 									uploadedBy,
@@ -205,8 +205,8 @@ const Home = () => {
 									link,
 								}) => (
 									<Post
-										onClick={() => showModal(id)}
-										key={id}
+										onClick={() => showModal(_id)}
+										key={_id}
 										author={author}
 										title={title}
 										uploadedBy={uploadedBy}
@@ -228,7 +228,7 @@ const Home = () => {
 							.sort(() => 0.5 - Math.random())
 							.map(
 								({
-									id,
+									_id,
 									title,
 									author,
 									uploadedBy,
@@ -238,8 +238,8 @@ const Home = () => {
 									link,
 								}) => (
 									<Post
-										onClick={() => showModal(id)}
-										key={`2${id}`}
+										onClick={() => showModal(_id)}
+										key={`2${_id}`}
 										author={author}
 										title={title}
 										uploadedBy={uploadedBy}
@@ -256,7 +256,7 @@ const Home = () => {
 			{isModal && (
 				<Modal
 					isModal={setIsModal}
-					id={activePost.id}
+					id={activePost._id}
 					website={activePost.website}
 					author={activePost.author}
 					link={activePost.link}
