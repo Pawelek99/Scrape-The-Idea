@@ -34,7 +34,6 @@ export class ArticlesService {
                 stars: '1000',
             })
         }
-        //console.log(data)
 
         const body1 = await awwwards.text()
         const _awwwards = cheerio.load(body1)
@@ -59,8 +58,8 @@ export class ArticlesService {
 
         let articles = data
         if (articles) {
-            articles = await Promise.all(articles.map(async (article) =>
-                await this.articleModel.create({
+            articles = await Promise.all(articles.map(async (article) => {
+                const content = {
                     author: article.author,
                     title: article.title,
                     thumbnail: article.thumbnail,
@@ -69,14 +68,20 @@ export class ArticlesService {
                     website: article.website,
                     createdAt: article.createdAt,
                     stars: article.stars,
-                })
-            ));
+                }
+                const checkArticle = await this.articleModel.find({title: article.title})
+                console.log(checkArticle)
+                if (checkArticle.length <= 0) {
+                    console.log('wchodze')
+                    return await this.articleModel.create(content)
+                }
+                console.log('nie wchodze')
+                return checkArticle
+            }));
 
-            console.log(articles)
-            return data
-
+            //console.log(articles)
+            return articles
         }
-
         return []
 
         // const regex = /var newestShots = ((?:.|\n)*?\}])/m;
@@ -101,7 +106,6 @@ export class ArticlesService {
     }
 
     async findAll(): Promise<Article[]> {
-
         return this.articleModel.find().exec()
     }
 };
