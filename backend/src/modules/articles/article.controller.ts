@@ -24,4 +24,19 @@ export class ArticlesController {
             sendError(response, error);
         }
     }
+
+    @Get('/all')
+    @ApiOperation({ summary: 'Returns all saved articles' })
+    @ApiOkResponse({
+        description: 'Returned all articles',
+        type: [Article],
+    })
+    async findAll(@Res() response: Response) {
+        try {
+            const articles = await this.articlesService.findAll();
+            sendResponse(response, articles, HttpStatus.OK);
+        } catch (error) {
+            sendError(response, error);
+        }
+    }
 }
