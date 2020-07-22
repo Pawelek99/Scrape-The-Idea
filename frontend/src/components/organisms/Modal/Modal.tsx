@@ -29,14 +29,11 @@ const Modal: React.SFC<ModalProps> = ({
 	link,
 	thumbnail,
 	stars,
-	image
+	image,
 }) => {
 	return (
 		<Container onClick={() => isModal(false)}>
-			<ModalWrapper
-				backgroundImg={image}
-				onClick={(e) => e.stopPropagation()}
-			>
+			<ModalWrapper backgroundImg={image} onClick={(e) => e.stopPropagation()}>
 				<Description>
 					<AuthorWrapper>
 						<h1>{website}</h1>

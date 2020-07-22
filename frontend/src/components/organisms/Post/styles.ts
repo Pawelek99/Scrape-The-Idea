@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
-
-
 export const StyledWrapper = styled.div`
-
 	@keyframes appear {
 		from {
 			opacity: 0;
@@ -17,7 +14,7 @@ export const StyledWrapper = styled.div`
 	overflow: hidden;
 	transition: transform 0.2s ease-in-out;
 	height: 250px;
-	animation: appear .5s;
+	animation: appear 0.5s;
 
 	&:hover {
 		transform: scale(1.26);

@@ -165,8 +165,8 @@ const Home = () => {
 	const [activePost, setActivePost] = useState(defaultPost);
 	const [posts, setPosts] = useState([defaultPost]);
 	const [allPosts, setAllPosts] = useState([defaultPost]);
-	const [phrase, setPhrase] = useState('')
-	const [searchResults, setSearchResults] = useState([defaultPost])
+	const [phrase, setPhrase] = useState('');
+	const [searchResults, setSearchResults] = useState([defaultPost]);
 
 	const showModal = (id: string) => {
 		if (posts) {
@@ -186,11 +186,10 @@ const Home = () => {
 		setSearchResults([defaultPost]);
 		fetch(`http://localhost:8000/api/v1/articles/all?phrase=${phrase}`)
 			.then((response) => response.json())
-			.then((data) => phrase ? setSearchResults(data) : setAllPosts(data));
+			.then((data) => (phrase ? setSearchResults(data) : setAllPosts(data)));
 	};
 
-
-	useMemo(() => getAllPosts(), [phrase])
+	useMemo(() => getAllPosts(), [phrase]);
 	useMemo(() => getPosts(), []);
 	useMemo(() => getAllPosts(), []);
 
@@ -199,11 +198,14 @@ const Home = () => {
 			<MainTemplate>
 				<header>
 					<HomepageHeading />
-					<SearchBar getPhrase={setPhrase}/>
+					<SearchBar getPhrase={setPhrase} />
 				</header>
 				<main>
-					<H3>{phrase ? 'Search results' : 'Recently uploaded' }</H3>
-					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) || (phrase && JSON.stringify(searchResults[0]) === JSON.stringify(defaultPost)) ? (
+					<H3>{phrase ? 'Search results' : 'Recently uploaded'}</H3>
+					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ||
+					(phrase &&
+						JSON.stringify(searchResults[0]) ===
+							JSON.stringify(defaultPost)) ? (
 						<Loader />
 					) : (
 						<GridContainer>
@@ -235,7 +237,11 @@ const Home = () => {
 								)}
 						</GridContainer>
 					)}
-					<H4>{(phrase && searchResults.length <= 0) && "Sorry, we don't have what you are looking for :c"}</H4>
+					<H4>
+						{phrase &&
+							searchResults.length <= 0 &&
+							"Sorry, we don't have what you are looking for :c"}
+					</H4>
 
 					<H3> Most liked </H3>
 					{JSON.stringify(allPosts[0]) === JSON.stringify(defaultPost) ? (

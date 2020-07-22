@@ -5,21 +5,20 @@ interface SearchProps {
 	getPhrase: (phrase: string) => void;
 }
 
-const SearchBar: React.SFC<SearchProps> = ({getPhrase}) => {
-
-	const [phrase, setPhrase] = useState('')
+const SearchBar: React.SFC<SearchProps> = ({ getPhrase }) => {
+	const [phrase, setPhrase] = useState('');
 
 	const onClickEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if(e.key === 'Enter') getPhrase(phrase);
-	}
+		if (e.key === 'Enter') getPhrase(phrase);
+	};
 
 	return (
 		<StyledWrapper>
 			<StyledInput
 				type="text"
 				placeholder="This is the part where you search..."
-				onChange = {(e) => setPhrase(e.target.value)}
-				value = {phrase}
+				onChange={(e) => setPhrase(e.target.value)}
+				value={phrase}
 				onKeyDown={onClickEnter}
 			/>
 			<StyledButton onClick={() => getPhrase(phrase)}>
