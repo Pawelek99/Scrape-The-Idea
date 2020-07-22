@@ -12,7 +12,7 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 
 	app.enableCors({
-		origin: '*' //process.env.CLIENT_URL,
+		origin: '*', //process.env.CLIENT_URL,
 		//credentials: true,
 		//exposedHeaders: 'WWW-Authenticate',
 	});
@@ -39,6 +39,3 @@ async function bootstrap() {
 	}
 }
 bootstrap();
-
-
-
