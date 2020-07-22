@@ -129,6 +129,6 @@ export class ArticlesService {
 
     async findAll(phrase: string): Promise<Article[]> {
         const likeStatement = new RegExp(`\S*${(phrase || '')}\S*`,`gmi`)
-        return this.articleModel.find({title: {$regex: likeStatement}}).exec()
+        return this.articleModel.find({$or: [{title: {$regex: likeStatement}}, {website: {$regex: likeStatement}}, {author: {$regex: likeStatement}}]}).exec()
     }
 };
