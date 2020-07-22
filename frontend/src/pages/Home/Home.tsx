@@ -3,6 +3,7 @@ import MainTemplate from 'templates/MainTemplate/MainTemplate';
 import HomepageHeading from 'components/molecules/HomepaheHeading/HomepageHeading';
 import SearchBar from 'components/molecules/SearchBar/SearchBar';
 import H3 from 'components/atoms/H3/H3';
+import H4 from 'components/atoms/H4/H4';
 import GridContainer from 'components/atoms/GridContainer/GridContainer';
 import Post from 'components/organisms/Post/Post';
 import Modal from '../../components/organisms/Modal/Modal';
@@ -164,6 +165,8 @@ const Home = () => {
 	const [activePost, setActivePost] = useState(defaultPost);
 	const [posts, setPosts] = useState([defaultPost]);
 	const [allPosts, setAllPosts] = useState([defaultPost]);
+	const [phrase, setPhrase] = useState('')
+	const [searchResults, setSearchResults] = useState([defaultPost])
 
 	const showModal = (id: string) => {
 		if (posts) {
@@ -180,11 +183,14 @@ const Home = () => {
 	};
 
 	const getAllPosts = () => {
-		fetch('http://localhost:8000/api/v1/articles/all')
+		setSearchResults([defaultPost]);
+		fetch(`http://localhost:8000/api/v1/articles/all?phrase=${phrase}`)
 			.then((response) => response.json())
-			.then((data) => setAllPosts(data));
+			.then((data) => phrase ? setSearchResults(data) : setAllPosts(data));
 	};
 
+
+	useMemo(() => getAllPosts(), [phrase])
 	useMemo(() => getPosts(), []);
 	useMemo(() => getAllPosts(), []);
 
@@ -193,15 +199,15 @@ const Home = () => {
 			<MainTemplate>
 				<header>
 					<HomepageHeading />
-					<SearchBar />
+					<SearchBar getPhrase={setPhrase}/>
 				</header>
 				<main>
-					<H3> Recently uploaded </H3>
-					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ? (
+					<H3>{phrase ? 'Search results' : 'Recently uploaded' }</H3>
+					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) || (phrase && JSON.stringify(searchResults[0]) === JSON.stringify(defaultPost)) ? (
 						<Loader />
 					) : (
 						<GridContainer>
-							{posts
+							{(phrase ? searchResults : posts)
 								.sort(() => 0.5 - Math.random())
 								.map(
 									({
@@ -229,10 +235,11 @@ const Home = () => {
 								)}
 						</GridContainer>
 					)}
+					<H4>{(phrase && searchResults.length <= 0) && "Sorry, we don't have what you are looking for :c"}</H4>
 
 					<H3> Most liked </H3>
 					{JSON.stringify(allPosts[0]) === JSON.stringify(defaultPost) ? (
-						'hello'
+						<Loader />
 					) : (
 						<GridContainer>
 							{allPosts

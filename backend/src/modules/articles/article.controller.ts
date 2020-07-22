@@ -1,5 +1,5 @@
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
-import { ApiOperation, ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Get, HttpStatus, Res, Query } from '@nestjs/common';
+import { ApiOperation, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
 import { Article } from './schemas/article.schema';
 import { Response } from 'express';
 import { sendResponse, sendError } from '../../common';
@@ -26,14 +26,21 @@ export class ArticlesController {
     }
 
     @Get('/all')
+    @ApiQuery({
+		name: 'phrase',
+		required: false,
+		allowEmptyValue: true,
+		description:
+			'Phrase to be looked for in the title, content, author or category.',
+	})
     @ApiOperation({ summary: 'Returns all saved articles' })
     @ApiOkResponse({
         description: 'Returned all articles',
         type: [Article],
     })
-    async findAll(@Res() response: Response) {
+    async findAll(@Query('phrase') phrase: string, @Res() response: Response) {
         try {
-            const articles = await this.articlesService.findAll();
+            const articles = await this.articlesService.findAll(phrase);
             sendResponse(response, articles, HttpStatus.OK);
         } catch (error) {
             sendError(response, error);

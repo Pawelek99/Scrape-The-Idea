@@ -38,23 +38,29 @@ export class ArticlesService {
 
         const body1 = await awwwards.text()
         const _awwwards = cheerio.load(body1)
-        const getImgUrlRegex = /\S+(png|jpg)/gm
+        const getImgUrlRegex = /\S+(png|jpg|jpeg|\.\ )/gm
 
         for(let i = 0; i < 20; i++) {
             if(!_awwwards('.box-item')[i]) break;
             data.push({
                 //temporary id
                 id: Math.floor(Math.random() * 100**10),
-                author: _awwwards('.by').find('a')[i].children[0].data,
-                title: _awwwards('h3').find('a')[i].children[0].data,
-                thumbnail: _awwwards('.rollover').find(_awwwards('.box-photo')).find('img')[i+6].attribs['data-srcset'].match(getImgUrlRegex)[0],
-                image: _awwwards('.rollover').find(_awwwards('.box-photo')).find('img')[i+6].attribs['data-srcset'].match(getImgUrlRegex)[1],
-                link: 'https://www.awwwards.com'+_awwwards('.box-info').find('a')[i].attribs.href,
+                author: _awwwards('.content-view').find(_awwwards('.by')).find('a')[i].children[0].data,
+                title: _awwwards('.content-view').find(_awwwards('h3')).find('a')[i].children[0].data,
+                thumbnail: _awwwards('.content-view').find(_awwwards('.rollover')).find(_awwwards('.box-photo')).find('img')[i].attribs['data-srcset'].match(getImgUrlRegex)[0],
+                image: _awwwards('.content-view').find(_awwwards('.rollover')).find(_awwwards('.box-photo')).find('img')[i].attribs['data-srcset'].match(getImgUrlRegex)[1],
+                link: 'https://www.awwwards.com'+_awwwards('.content-view').find(_awwwards('.rollover')).find('a').not('.js-visit-item')[i].attribs.href,
                 website: 'AWWWARDS',
                 createdAt: new Date().toISOString(),
                 //@todo
                 stars: '1000',
             })
+        }
+
+        for(let i = 0; i < 20; i++) {
+            console.log(i)
+            console.log(_awwwards('.content-view').find(_awwwards('h3')).find('a')[i].children[0].data)
+            console.log(_awwwards('.content-view').find(_awwwards('.rollover')).find(_awwwards('.box-photo')).find('img')[i].attribs['data-srcset'].match(getImgUrlRegex)[0])
         }
 
         const body2 = await behance.text()
@@ -121,7 +127,8 @@ export class ArticlesService {
         // return [];
     }
 
-    async findAll(): Promise<Article[]> {
-        return this.articleModel.find().exec()
+    async findAll(phrase: string): Promise<Article[]> {
+        const likeStatement = new RegExp(`\S*${(phrase || '')}\S*`,`gmi`)
+        return this.articleModel.find({title: {$regex: likeStatement}}).exec()
     }
 };
