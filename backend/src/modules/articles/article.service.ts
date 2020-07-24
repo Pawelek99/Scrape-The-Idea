@@ -95,19 +95,27 @@ export class ArticlesService {
 				image: _behance('.js-cover-image')
 					[i].attribs.srcset.match(getImgUrlRegex)
 					.pop(),
-				link: _behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i].attribs.href,
+				link: _behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[
+					i
+				].attribs.href,
 				website: 'BEHANCE',
 				createdAt: new Date().toISOString(),
 				//@todo
 				stars: '1000',
 			});
-        }
+		}
 
-        for (let i = 0; i < 20; i++) {
-            console.log(i)
-            console.log(_behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i].children[0].data)
-            console.log(_behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i].attribs.href)
-        }
+		for (let i = 0; i < 20; i++) {
+			console.log(i);
+			console.log(
+				_behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i]
+					.children[0].data
+			);
+			console.log(
+				_behance('.TitleOwner-limitHeight-2_Y').find('a[data-ut=title]')[i]
+					.attribs.href
+			);
+		}
 
 		let articles = data;
 		if (articles) {
