@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyledWrapper, StyledInput, StyledButton } from './styles';
 
-const SearchBar = () => {
+interface SearchProps {
+	getPhrase: (phrase: string) => void;
+}
+
+const SearchBar: React.SFC<SearchProps> = ({ getPhrase }) => {
+	const [phrase, setPhrase] = useState('');
+
+	const onClickEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') getPhrase(phrase);
+	};
+
 	return (
 		<StyledWrapper>
 			<StyledInput
 				type="text"
 				placeholder="This is the part where you search..."
+				onChange={(e) => setPhrase(e.target.value)}
+				value={phrase}
+				onKeyDown={onClickEnter}
 			/>
-			<StyledButton>
+			<StyledButton onClick={() => getPhrase(phrase)}>
 				<svg
 					width="24"
 					height="24"

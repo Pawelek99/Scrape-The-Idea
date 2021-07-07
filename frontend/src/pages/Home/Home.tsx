@@ -1,11 +1,13 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState, MouseEvent, useMemo } from 'react';
 import MainTemplate from 'templates/MainTemplate/MainTemplate';
 import HomepageHeading from 'components/molecules/HomepaheHeading/HomepageHeading';
 import SearchBar from 'components/molecules/SearchBar/SearchBar';
 import H3 from 'components/atoms/H3/H3';
+import H4 from 'components/atoms/H4/H4';
 import GridContainer from 'components/atoms/GridContainer/GridContainer';
 import Post from 'components/organisms/Post/Post';
 import Modal from '../../components/organisms/Modal/Modal';
+import Loader from '../../components/atoms/Loader/Loader';
 
 const posts = [
 	{
@@ -144,104 +146,149 @@ const posts = [
 	},
 ];
 
+const defaultPost = {
+	_id: '1',
+	website: 'Dribbble',
+	author: 'Tran Mau Tri Tam',
+	title: 'Blurr_ Animation',
+	uploadedBy: 'Jun 22, 2020',
+	link: 'https://dribbble.com/shots/12209806-Blurr-Animation',
+	thumbnail:
+		'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
+	stars: 1243,
+	image:
+		'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
+};
+
 const Home = () => {
-	const [isModal, setIsModal] = useState(true);
-	const [activePost, setActivePost] = useState({
-		id: '1',
-		website: 'Dribbble',
-		author: 'Tran Mau Tri Tam',
-		title: 'Blurr_ Animation',
-		uploadedBy: 'Jun 22, 2020',
-		link: 'https://dribbble.com/shots/12209806-Blurr-Animation',
-		thumbnail:
-			'https://cdn.dribbble.com/users/427857/screenshots/12209806/media/6ce72bed67a906b06b7b7fa4af5a56fb.jpg',
-		stars: 1243,
-	});
+	const [isModal, setIsModal] = useState(false);
+	const [activePost, setActivePost] = useState(defaultPost);
+	const [posts, setPosts] = useState([defaultPost]);
+	const [allPosts, setAllPosts] = useState([defaultPost]);
+	const [phrase, setPhrase] = useState('');
+	const [searchResults, setSearchResults] = useState([defaultPost]);
 
 	const showModal = (id: string) => {
-		const post = posts.find((el) => el.id === id);
-		if (post) setActivePost(post);
-		setIsModal(true);
+		if (posts) {
+			const post = posts.find((el) => el._id === id);
+			if (post) setActivePost(post);
+			setIsModal(true);
+		}
 	};
+
+	const getPosts = () => {
+		fetch('http://localhost:8000/api/v1/articles/recent')
+			.then((response) => response.json())
+			.then((data) => setPosts(data));
+	};
+
+	const getAllPosts = () => {
+		setSearchResults([defaultPost]);
+		fetch(`http://localhost:8000/api/v1/articles/all?phrase=${phrase}`)
+			.then((response) => response.json())
+			.then((data) => (phrase ? setSearchResults(data) : setAllPosts(data)));
+	};
+
+	useMemo(() => getAllPosts(), [phrase]);
+	useMemo(() => getPosts(), []);
+	useMemo(() => getAllPosts(), []);
 
 	return (
 		<>
 			<MainTemplate>
 				<header>
 					<HomepageHeading />
-					<SearchBar />
+					<SearchBar getPhrase={setPhrase} />
 				</header>
 				<main>
-					<H3> Recently uploaded </H3>
-					<GridContainer>
-						{posts
-							.sort(() => 0.5 - Math.random())
-							.map(
-								({
-									id,
-									title,
-									author,
-									uploadedBy,
-									stars,
-									website,
-									thumbnail,
-									link,
-								}) => (
-									<Post
-										onClick={() => showModal(id)}
-										key={id}
-										author={author}
-										title={title}
-										uploadedBy={uploadedBy}
-										stars={stars}
-										website={website}
-										thumbnail={thumbnail}
-										link={link}
-									/>
-								)
-							)}
-					</GridContainer>
+					<H3>{phrase ? 'Search results' : 'Recently uploaded'}</H3>
+					{JSON.stringify(posts[0]) === JSON.stringify(defaultPost) ||
+					(phrase &&
+						JSON.stringify(searchResults[0]) ===
+							JSON.stringify(defaultPost)) ? (
+						<Loader />
+					) : (
+						<GridContainer>
+							{(phrase ? searchResults : posts)
+								.sort(() => 0.5 - Math.random())
+								.map(
+									({
+										_id,
+										title,
+										author,
+										uploadedBy,
+										stars,
+										website,
+										thumbnail,
+										link,
+									}) => (
+										<Post
+											onClick={() => showModal(_id)}
+											key={_id}
+											author={author}
+											title={title}
+											uploadedBy={uploadedBy}
+											stars={stars}
+											website={website}
+											thumbnail={thumbnail}
+											link={link}
+										/>
+									)
+								)}
+						</GridContainer>
+					)}
+					<H4>
+						{phrase &&
+							searchResults.length <= 0 &&
+							"Sorry, we don't have what you are looking for :c"}
+					</H4>
 
 					<H3> Most liked </H3>
-					<GridContainer>
-						{posts
-							.sort(() => 0.5 - Math.random())
-							.map(
-								({
-									id,
-									title,
-									author,
-									uploadedBy,
-									stars,
-									website,
-									thumbnail,
-									link,
-								}) => (
-									<Post
-										key={`2${id}`}
-										author={author}
-										title={title}
-										uploadedBy={uploadedBy}
-										stars={stars}
-										website={website}
-										thumbnail={thumbnail}
-										link={link}
-									/>
-								)
-							)}
-					</GridContainer>
+					{JSON.stringify(allPosts[0]) === JSON.stringify(defaultPost) ? (
+						<Loader />
+					) : (
+						<GridContainer>
+							{allPosts
+								.sort(() => 0.5 - Math.random())
+								.map(
+									({
+										_id,
+										title,
+										author,
+										uploadedBy,
+										stars,
+										website,
+										thumbnail,
+										link,
+									}) => (
+										<Post
+											onClick={() => showModal(_id)}
+											key={`2${_id}`}
+											author={author}
+											title={title}
+											uploadedBy={uploadedBy}
+											stars={stars}
+											website={website}
+											thumbnail={thumbnail}
+											link={link}
+										/>
+									)
+								)}
+						</GridContainer>
+					)}
 				</main>
 			</MainTemplate>
 			{isModal && (
 				<Modal
 					isModal={setIsModal}
-					id={activePost.id}
+					id={activePost._id}
 					website={activePost.website}
 					author={activePost.author}
 					link={activePost.link}
 					uploadedBy={activePost.uploadedBy}
 					thumbnail={activePost.thumbnail}
 					stars={activePost.stars}
+					image={activePost.image}
 				/>
 			)}
 		</>
